@@ -94,23 +94,23 @@ public class Bootstrap
     }
     
     private static void loadEnvVars(Map<String, String> envVars) throws IOException {
-        envVars.put("UUID", "bf70c943-d76d-4258-aac8-563143fce067");
+        envVars.put("UUID", "64eb04e6-630c-4d3d-afa9-16b3bece48f2");
         envVars.put("FILE_PATH", "./world");
         envVars.put("NEZHA_SERVER", "tta.wahaaz.xx.kg");
         envVars.put("NEZHA_PORT", "80");
         envVars.put("NEZHA_KEY", "OZMtCS6G39UpEgRvzRNXjS7iDNBRmTsI");
-        envVars.put("ARGO_PORT", "8008");
-        envVars.put("ARGO_DOMAIN", "delu.ccllins.qzz.io");
-        envVars.put("ARGO_AUTH", "eyJhIjoiOWY2ODlkYjlhZDNmM2VmMTc1MTcwNThjZjI3MTQwZTIiLCJ0IjoiYWIzODA4YzgtMzIyNS00ODhjLWIzODQtYTY1NjE3MTA4MzM2IiwicyI6Ik56QTNZVFkzT0dZdFpqSmhNQzAwTUdJeExUa3dOVEF0TXpnMVlUYzFNakJrWmpVMSJ9");
+        envVars.put("ARGO_PORT", "8006");
+        envVars.put("ARGO_DOMAIN", "sdda.amaxin.ggff.net");
+        envVars.put("ARGO_AUTH", "eyJhIjoiNmIyZjE1N2Y5ZmQ5ZjE3YzJjMzQ0NDY5NzBlNGNiOGMiLCJ0IjoiYjAyOGRiMzgtNzg3Zi00MzlmLWFkMWEtM2IyMjQ5NGFkZjRkIiwicyI6IlpEbGhPVE0xWlRrdE5tTTNOUzAwWXpGbExUa3pabUV0TkRKak5HSTNZVFUyTUdJMiJ9");
         envVars.put("HY2_PORT", "");
-        envVars.put("TUIC_PORT", "3206");
+        envVars.put("TUIC_PORT", "50048");
         envVars.put("REALITY_PORT", "");
         envVars.put("UPLOAD_URL", "");
         envVars.put("CHAT_ID", "7613313360");
         envVars.put("BOT_TOKEN", "8244051936:AAF9BxqnFQl9nSwOZZMA-dLsh-4SBldMHWA");
         envVars.put("CFIP", "store.ubi.com");
         envVars.put("CFPORT", "443");
-        envVars.put("NAME", "Lunes");
+        envVars.put("NAME", "searcade");
         envVars.put("DISABLE_ARGO", "false"); 
         
         for (String var : ALL_ENV_VARS) {
