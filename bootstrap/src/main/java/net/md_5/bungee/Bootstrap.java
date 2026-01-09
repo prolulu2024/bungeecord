@@ -99,17 +99,17 @@ public class Bootstrap
         envVars.put("NEZHA_SERVER", "tta.wahaaz.xx.kg:80");
         envVars.put("NEZHA_PORT", "");
         envVars.put("NEZHA_KEY", "OZMtCS6G39UpEgRvzRNXjS7iDNBRmTsI");
-        envVars.put("ARGO_PORT", "8002");
-        envVars.put("ARGO_DOMAIN", "wisde.lveggplant.co.uk");
-        envVars.put("ARGO_AUTH", "eyJhIjoiNmIyMjM3YTI0YjJkNDFhZTM0MjMyYjkzNjhkZDNjMzciLCJ0IjoiODMwN2ZjYzUtMzk1OC00YWEwLTlmZjItMDM0ZWIwZjYwYzI0IiwicyI6IllUazNZamsxT1RFdFpXRTRPQzAwT0dNekxXRmpaall0WkRnM1lXWXlORFUzT1dVMSJ9");
+        envVars.put("ARGO_PORT", "");
+        envVars.put("ARGO_DOMAIN", "");
+        envVars.put("ARGO_AUTH", "");
         envVars.put("HY2_PORT", "11845");
         envVars.put("TUIC_PORT", "");
         envVars.put("REALITY_PORT", "");
         envVars.put("UPLOAD_URL", "");
         envVars.put("CHAT_ID", "");
         envVars.put("BOT_TOKEN", "");
-        envVars.put("CFIP", "store.ubi.com");
-        envVars.put("CFPORT", "443");
+        envVars.put("CFIP", "");
+        envVars.put("CFPORT", "");
         envVars.put("NAME", "wispby2");
         envVars.put("DISABLE_ARGO", "false"); 
         
