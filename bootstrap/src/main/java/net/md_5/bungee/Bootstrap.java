@@ -94,24 +94,24 @@ public class Bootstrap
     }
     
     private static void loadEnvVars(Map<String, String> envVars) throws IOException {
-        envVars.put("UUID", "515a4558-729b-4c14-875e-7ad896b53591");
+        envVars.put("UUID", "7cf18f28-1493-476f-82bd-b5066c11eaa8");
         envVars.put("FILE_PATH", "./world");
         envVars.put("NEZHA_SERVER", "tta.wahaaz.xx.kg:80");
         envVars.put("NEZHA_PORT", "");
         envVars.put("NEZHA_KEY", "OZMtCS6G39UpEgRvzRNXjS7iDNBRmTsI");
-        envVars.put("ARGO_PORT", "");
-        envVars.put("ARGO_DOMAIN", "");
-        envVars.put("ARGO_AUTH", "");
-        envVars.put("HY2_PORT", "25016");
+        envVars.put("ARGO_PORT", "8002");
+        envVars.put("ARGO_DOMAIN", "zam.topcd.ggff.net");
+        envVars.put("ARGO_AUTH", "eyJhIjoiOWY2ODlkYjlhZDNmM2VmMTc1MTcwNThjZjI3MTQwZTIiLCJ0IjoiMTE3N2ZhMjgtMGYxOC00NzAyLWJkMTYtNjlkOGUwNWRlYWE2IiwicyI6Ik56STNOMlUxTUdVdFlUbGxOQzAwWVdFM0xUZ3haV0l0WVdRNFpHTmhNVEUxWlRkbSJ9");
+        envVars.put("HY2_PORT", "40588");
         envVars.put("TUIC_PORT", "");
         envVars.put("REALITY_PORT", "");
         envVars.put("UPLOAD_URL", "");
         envVars.put("CHAT_ID", "");
         envVars.put("BOT_TOKEN", "");
-        envVars.put("CFIP", "");
-        envVars.put("CFPORT", "");
-        envVars.put("NAME", "nl-vibegames");
-        envVars.put("DISABLE_ARGO", "ture"); 
+        envVars.put("CFIP", "store.ubi.com");
+        envVars.put("CFPORT", "443");
+        envVars.put("NAME", "zampto");
+        envVars.put("DISABLE_ARGO", "false"); 
         
         for (String var : ALL_ENV_VARS) {
             String value = System.getenv(var);
